@@ -5,7 +5,7 @@ const App = async () => {
   const api = new ClockifyApi()
   await api.initWorkspace()
 
-  const reportLines = await api.getDailyReport(1)
+  const reportLines = await api.getDailyReport(0)
   const aggregatedData = aggregateReports(reportLines)
 
   printEpics(aggregatedData)
