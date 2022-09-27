@@ -35,20 +35,39 @@ export const aggregateReports = (reportLines: ReportLine[]): Epic[] => {
 }
 
 export const printEpics = (epics: Epic[]): void => {
-  const EPIC_LENGTH = 300
-  const TASKS_LENGTH = 100
-  const DURATION_LENGTH = 6
+  const EPIC_LENGTH = 80
+  const TASKS_LENGTH = 50
+  const DURATION_LENGTH = 14
 
   const uniqueTasks = (value: string, idx: number, self: string[]) =>
     self.indexOf(value) === idx
 
+  console.log(JSON.stringify(epics))
   const prettyTable = epics.map((epic) => ({
     name: epic.name.padEnd(EPIC_LENGTH),
-    tasks: epic.tasks.filter(uniqueTasks).join(', ').padEnd(TASKS_LENGTH),
+    tasks: epic.tasks
+      .map((t) => t.trim())
+      .filter(uniqueTasks)
+      .join(', ')
+      .padEnd(TASKS_LENGTH),
     minutes: (epic.durationSecs / 60).toFixed(2).padStart(DURATION_LENGTH),
   }))
 
-  prettyTable.push({
+  console.log('\n\n')
+  console.log(
+    [
+      'EPIC'.padEnd(EPIC_LENGTH),
+      'TASKS'.padEnd(TASKS_LENGTH),
+      'DURATION (MIN)'.padStart(DURATION_LENGTH),
+    ].join('')
+  )
+  console.log(''.padEnd(EPIC_LENGTH + TASKS_LENGTH + DURATION_LENGTH, '='))
+  prettyTable.forEach((line) => {
+    console.log(Object.values(line).join(''))
+    console.log(''.padEnd(EPIC_LENGTH + TASKS_LENGTH + DURATION_LENGTH, '-'))
+  })
+
+  const sum = {
     name: 'SUM'.padEnd(EPIC_LENGTH),
     tasks: ''.padEnd(TASKS_LENGTH),
     minutes: (
@@ -58,6 +77,7 @@ export const printEpics = (epics: Epic[]): void => {
     )
       .toFixed(2)
       .padStart(DURATION_LENGTH),
-  })
-  console.table(prettyTable)
+  }
+  console.log(''.padEnd(EPIC_LENGTH + TASKS_LENGTH + DURATION_LENGTH, '='))
+  console.log(Object.values(sum).join(''), '\n')
 }

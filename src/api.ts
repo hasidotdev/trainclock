@@ -31,9 +31,8 @@ class Api {
     this.workspaceId = userData.defaultWorkspace as string
   }
 
-  public async getDailyReport(): Promise<ReportLine[]> {
-    const dayPasts = 1
-    const dayStamp = Date.now() - 86400000 * dayPasts
+  public async getDailyReport(daysInPast = 0): Promise<ReportLine[]> {
+    const dayStamp = Date.now() - 86400000 * daysInPast
 
     const startDate = new Date(new Date(dayStamp).setHours(0, 0, 0, 0))
     const startDateStr = startDate.toISOString()
