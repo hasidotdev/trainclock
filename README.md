@@ -1,2 +1,3 @@
-# trainclock
-Aggregating Clockify Time-Entries per epic
+# TrainClock 🚂 ⏱
+
+## Aggregating Clockify Time-Entries per epic
