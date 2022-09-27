@@ -6,6 +6,19 @@ export interface ReportLine {
   durationSec: number
 }
 
+interface ClockifyTimeEntry {
+  description: string
+  timeInterval: { duration: number }
+}
+
+interface ClockifyReport {
+  timeentries: ClockifyTimeEntry[]
+}
+
+interface ClockifyUserData {
+  defaultWorkspace: string
+}
+
 type Endpoint = 'base' | 'reports'
 
 class Api {
@@ -20,7 +33,6 @@ class Api {
   }
 
   constructor() {
-    process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
     dotenv.config()
     this.apiKey = process.env.CLOCKIFY_API_KEY || false
     this.projectId = process.env.PROJECT_ID || false
@@ -40,7 +52,7 @@ class Api {
     const endDateStr = endDate.toISOString()
 
     const reports = await this.getReport(startDateStr, endDateStr)
-    return reports.timeentries.map((tE: Record<string, any>) => ({
+    return reports.timeentries.map((tE: ClockifyTimeEntry) => ({
       description: tE.description,
       durationSec: tE.timeInterval.duration / 60,
     }))
@@ -49,7 +61,7 @@ class Api {
   private async getReport(
     dateRangeStart: string,
     dateRangeEnd: string
-  ): Promise<any> {
+  ): Promise<ClockifyReport> {
     const url = `workspaces/${this.workspaceId}/reports/detailed`
 
     return await this.post(url, 'reports', {
@@ -68,8 +80,8 @@ class Api {
     })
   }
 
-  private async getUserData(): Promise<Record<string, any>> {
-    return (await this.get('user')) as Record<string, any>
+  private async getUserData(): Promise<ClockifyUserData> {
+    return (await this.get('user')) as ClockifyUserData
   }
 
   private async get(url: string, endpoint: Endpoint = 'base') {
@@ -78,7 +90,7 @@ class Api {
   private async post(
     url: string,
     endpoint: Endpoint = 'base',
-    body: Record<string, any>
+    body: Record<string, unknown>
   ) {
     return this.doFetch(url, 'POST', body, endpoint)
   }
@@ -86,7 +98,7 @@ class Api {
   private async doFetch(
     url: string,
     method = 'GET',
-    requestBody: Record<string, any> | undefined,
+    requestBody: Record<string, unknown> | undefined,
     endpoint: Endpoint
   ) {
     if (!this.apiKey) {

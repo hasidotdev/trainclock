@@ -36,13 +36,12 @@ export const aggregateReports = (reportLines: ReportLine[]): Epic[] => {
 
 export const printEpics = (epics: Epic[]): void => {
   const EPIC_LENGTH = 80
-  const TASKS_LENGTH = 50
+  const TASKS_LENGTH = 90
   const DURATION_LENGTH = 14
 
   const uniqueTasks = (value: string, idx: number, self: string[]) =>
     self.indexOf(value) === idx
 
-  console.log(JSON.stringify(epics))
   const prettyTable = epics.map((epic) => ({
     name: epic.name.padEnd(EPIC_LENGTH),
     tasks: epic.tasks

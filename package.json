@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "start:dev": "ts-node-dev --inspect --respawn .",
-    "lint": "eslint",
+    "lint": "tsc --noEmit && eslint",
     "build": "tsc",
     "start": "node dist/index.js"
   },
