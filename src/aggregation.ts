@@ -56,7 +56,7 @@ export const printEpics = (epics: Epic[]): void => {
     [
       'EPIC'.padEnd(EPIC_LENGTH),
       'TASKS'.padEnd(TASKS_LENGTH),
-      'DURATION (MIN)'.padStart(DURATION_LENGTH),
+      'DURATION (HRS)'.padStart(DURATION_LENGTH),
     ].join('')
   )
   console.log(''.padEnd(EPIC_LENGTH + TASKS_LENGTH + DURATION_LENGTH, '='))
